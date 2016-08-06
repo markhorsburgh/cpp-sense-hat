@@ -79,6 +79,18 @@ static int sense_hat_init_fb()
 	return 0;
 }
 
+int sense_hat_blank()
+{
+	int rc = sense_hat_init_fb();
+	if(rc != 0) {
+		return rc;
+	}
+	char buf[128];
+	memset(buf, 0, 128);
+	pwrite(sense_hat_fbfd, buf, 128, 0);
+	return 0;
+}
+
 int sense_hat_set_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 {
 	int rc = sense_hat_init_fb();

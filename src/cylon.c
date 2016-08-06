@@ -3,10 +3,14 @@
 
 int main() 
 {
+	int rc = sense_hat_blank();
+	if(rc != 0) {
+		fprintf(stderr, "error in sense_hat_blank(): %s", strerror(rc));
+	}
 	int x = 0;
 	int i = 1;
 	while(1) {
-			int rc = sense_hat_set_pixel(4, x, 255, 0, 0);
+			rc = sense_hat_set_pixel(4, x, 255, 0, 0);
 			if(rc != 0) {
 				fprintf(stderr, "error in sense_hat_set_pixel(): %s", strerror(rc));
 			}
