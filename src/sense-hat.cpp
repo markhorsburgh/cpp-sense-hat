@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#include <ctype.h>
+#include <unistd.h>
 #include "sense-hat.h"
 
 static pthread_mutex_t sense_hat_mutex = PTHREAD_MUTEX_INITIALIZER;

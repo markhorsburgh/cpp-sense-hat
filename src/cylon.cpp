@@ -1,5 +1,7 @@
 #include <sense-hat.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 int put_dot(int x, uint8_t r, uint8_t g, uint8_t b)
 {
