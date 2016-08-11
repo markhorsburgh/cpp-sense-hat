@@ -15,8 +15,12 @@
 #include "sense-hat.h"
 
 static pthread_mutex_t sense_hat_mutex = PTHREAD_MUTEX_INITIALIZER;
-static int sense_hat_fbfd = -1;
-const char SENSE_HAT_FB_NAME[] = "RPi-Sense FB";
+static const char SENSE_HAT_FB_NAME[] = "RPi-Sense FB";
+
+SenseHAT::SenseHAT()
+	: fbfd(-1)
+{
+}
 
 static uint16_t pack_pixel(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -37,9 +41,9 @@ static void sense_hat_rstrip(char* s)
 	end[1] = '\0';
 }
 
-static int sense_hat_init_fb()
+int SenseHAT::init_fb()
 {
-	if(sense_hat_fbfd != -1) {
+	if(fbfd != -1) {
 		return 0;
 	}
 	DIR* d = opendir("/sys/class/graphics");
@@ -68,10 +72,10 @@ static int sense_hat_init_fb()
 			sense_hat_rstrip(name);
 			if(strcmp(name, SENSE_HAT_FB_NAME) == 0) {
 				snprintf(path, PATH_MAX, "/dev/%s", dent->d_name);
-				sense_hat_fbfd = open(path, O_RDWR);
+				fbfd = open(path, O_RDWR);
 				free(dent);
 				closedir(d);
-				if(sense_hat_fbfd == -1) {
+				if(fbfd == -1) {
 					return errno;
 				}
 				break;
@@ -81,26 +85,30 @@ static int sense_hat_init_fb()
 	return 0;
 }
 
-int sense_hat_blank()
+int SenseHAT::blank()
 {
-	int rc = sense_hat_init_fb();
+	int rc = init_fb();
 	if(rc != 0) {
 		return rc;
 	}
 	char buf[128];
 	memset(buf, 0, 128);
-	pwrite(sense_hat_fbfd, buf, 128, 0);
+	if(pwrite(fbfd, buf, 128, 0) != 128) {
+		return errno;
+	}
 	return 0;
 }
 
-int sense_hat_set_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b)
+int SenseHAT::set_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 {
-	int rc = sense_hat_init_fb();
+	int rc = init_fb();
 	if(rc != 0) {
 		return rc;
 	}
 	uint16_t p = pack_pixel(r, g, b);
-	pwrite(sense_hat_fbfd, &p, 2, (x + y*8)*2);
+	if(pwrite(fbfd, &p, 2, (x + y*8)*2) != 2) {
+		return errno;
+	}
 	return 0;
 }
 
