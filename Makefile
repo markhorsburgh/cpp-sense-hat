@@ -15,3 +15,6 @@ $(LIB): src/sense-hat.o
 src/sense-hat.o: src/sense-hat.cpp src/sense-hat.h
 	g++ -c -Isrc -Os -o $@ src/sense-hat.cpp
 
+clean:
+	rm -f $(SAMPLES)
+	rm -f $(LIB)
