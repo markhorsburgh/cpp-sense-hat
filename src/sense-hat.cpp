@@ -14,12 +14,16 @@
 #include <unistd.h>
 #include "sense-hat.h"
 
+#include <RTIMULib.h>
+
 static pthread_mutex_t sense_hat_mutex = PTHREAD_MUTEX_INITIALIZER;
 static const char SENSE_HAT_FB_NAME[] = "RPi-Sense FB";
 
 SenseHAT::SenseHAT()
 	: fbfd(-1)
 {
+	humidity = RTHumidity::createHumidity(new RTIMUSettings());
+	humidity->humidityInit();
 }
 
 static uint16_t pack_pixel(uint8_t r, uint8_t g, uint8_t b)
@@ -112,3 +116,14 @@ int SenseHAT::set_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 	return 0;
 }
 
+double SenseHAT::get_humidity()
+{
+	RTIMU_DATA data;
+	if(!humidity->humidityRead(data)) {
+		return nan("");
+	}
+	if(!data.humidityValid) {
+		return nan("");
+	}
+	return data.humidity;
+}

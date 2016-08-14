@@ -1,4 +1,4 @@
-SAMPLES := samples/cylon samples/blank
+SAMPLES := samples/cylon samples/blank samples/sensors
 LIB := lib/libsense-hat.so
 CXXFLAGS := -Isrc -Os
 PICFLAGS := -fPIC
@@ -12,8 +12,11 @@ samples/blank: src/blank.cpp src/sense-hat.h $(LIB)
 samples/cylon: src/cylon.cpp src/sense-hat.h $(LIB)
 	$(CXX) $(CXXFLAGS) -o samples/cylon src/cylon.cpp -Llib -lsense-hat
 
+samples/sensors: src/sensors.cpp src/sense-hat.h $(LIB)
+	$(CXX) $(CXXFLAGS) -o samples/sensors src/sensors.cpp -Llib -lsense-hat
+
 $(LIB): src/sense-hat.o
-	$(CXX) $(SO_LDFLAGS) -o $@ $<
+	$(CXX) $(SO_LDFLAGS) -o $@ $< -lRTIMULib
 
 src/sense-hat.so: src/sense-hat.cpp src/sense-hat.h
 	$(CXX) $(CXXFLAGS) $(PICFLAGS) $(SO_LDFLAGS) -o $@ src/sense-hat.cpp
