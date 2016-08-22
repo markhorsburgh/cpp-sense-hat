@@ -15,6 +15,7 @@ public:
 	int set_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
 
 	// Sensor methods
+	double get_temperature();
 	double get_humidity();
 	double get_temperature_from_humidity();
 

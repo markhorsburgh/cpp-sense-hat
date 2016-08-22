@@ -116,6 +116,11 @@ int SenseHAT::set_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 	return 0;
 }
 
+double SenseHAT::get_temperature()
+{
+	return get_temperature_from_humidity();
+}
+
 double SenseHAT::get_humidity()
 {
 	RTIMU_DATA data;
