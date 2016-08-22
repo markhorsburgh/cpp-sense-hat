@@ -127,3 +127,16 @@ double SenseHAT::get_humidity()
 	}
 	return data.humidity;
 }
+
+double SenseHAT::get_temperature_from_humidity()
+{
+	RTIMU_DATA data;
+	if(!humidity->humidityRead(data)) {
+		return nan("");
+	}
+	if(!data.temperatureValid) {
+		return nan("");
+	}
+	return data.temperature;
+}
+

@@ -16,6 +16,7 @@ public:
 
 	// Sensor methods
 	double get_humidity();
+	double get_temperature_from_humidity();
 
 private:
 	int fbfd;
