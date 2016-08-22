@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 class RTHumidity;
+class RTPressure;
 
 class SenseHAT {
 public:
@@ -18,6 +19,8 @@ public:
 	double get_temperature();
 	double get_humidity();
 	double get_temperature_from_humidity();
+	double get_pressure();
+	double get_temperature_from_pressure();
 
 private:
 	int fbfd;
@@ -25,4 +28,5 @@ private:
 	int init_fb();
 
 	RTHumidity* humidity;
+	RTPressure* pressure;
 };
